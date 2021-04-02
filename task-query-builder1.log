@@ -1,0 +1,6 @@
+Mar 26, 2021 2:16:19 PM edu.umass.ciir.TaskQueryBuilder1 process
+INFO: Starting query construction
+Mar 26, 2021 2:16:19 PM edu.umass.ciir.Spacy startSpacySentenceDaemon
+INFO: Starting spacy sentence daemon
+Mar 26, 2021 2:16:20 PM edu.umass.ciir.Spacy startSpacyNounPhraseDaemon
+INFO: Starting spacy noun phrase daemon

@@ -1,0 +1,17 @@
+GalagoQT: tranlate_phrase_sdm_syn
+North Korea
+
+back from self.spacy_english_tokenizer_and_cleaner
+Length of phrase: 2
+token: north
+Calling get_tt_topk
+back from get_tt_topk
+wrapping it with synonym
+finished wrapping it with synonym
+token: korea
+Calling get_tt_topk
+back from get_tt_topk
+wrapping it with synonym
+finished wrapping it with synonym
+wrapping it with sdm
+finished wrapping it with sdm
