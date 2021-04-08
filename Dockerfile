@@ -44,12 +44,7 @@ RUN pip3 install numpy
 RUN pip3 install Cython
 RUN pip3 install blis
 RUN pip3 install spacy
-RUN pip3 install scipy
-RUN BLIS_REALLY_COMPILE=1 pip3 install git+https://github.com/boudinfl/pke.git
 RUN pip3 install arabic_reshaper
-RUN pip3 install nltk
-
-##RUN apt-get update ; apt-get install docker.io -y
 
 # Create user with sudo powers
 RUN useradd -m taskquerybuilder && \
@@ -62,7 +57,6 @@ RUN useradd -m taskquerybuilder && \
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-
 ENV HOME /home/taskquerybuilder
 ENV USER taskquerybuilder
 USER taskquerybuilder
@@ -71,9 +65,6 @@ USER taskquerybuilder
 RUN touch $HOME/.sudo_as_admin_successful
 
 # The following put files in user's home directory
-RUN python3 -m nltk.downloader stopwords
-RUN python3 -m nltk.downloader universal_tagset
-RUN LC_ALL=C.UTF-8 LANG=C.UTF-8 python3 -m spacy download en_core_web_lg
 RUN LC_ALL=C.UTF-8 LANG=C.UTF-8 python3 -m spacy download en_core_web_sm
 
 WORKDIR /home/taskquerybuilder

@@ -7,7 +7,7 @@ Pass the string to extract from via STDIN.
 This script returns the extracted phrases in STDOUT.
 """
 # Load English tokenizer, tagger, parser, NER and word vectors
-nlp = spacy.load("en_core_web_lg")
+nlp = spacy.load("en_core_web_sm")
 
 # Get query from stdin:
 while True:

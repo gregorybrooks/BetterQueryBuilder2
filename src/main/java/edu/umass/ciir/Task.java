@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class Task {
-    private static final Logger logger = Logger.getLogger("TaskQueryBuilder1");
+    private static final Logger logger = Logger.getLogger("BetterQueryBuilder2");
     String taskNum;
     String taskTitle;
     String taskStmt;

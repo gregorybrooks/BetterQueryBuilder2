@@ -4,15 +4,14 @@ import com.cedarsoftware.util.io.JsonWriter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.*;
 
-public class TaskQueryBuilder1 {
-    private static final Logger logger = Logger.getLogger("TaskQueryBuilder1");
+public class BetterQueryBuilder2 {
+    private static final Logger logger = Logger.getLogger("BetterQueryBuilder2");
     private Map<String, String> queries = new ConcurrentHashMap<>();
     private Map<String, String> nonTranslatedQueries = new ConcurrentHashMap<>();
     private String analyticTasksFile;
@@ -27,16 +26,8 @@ public class TaskQueryBuilder1 {
         queries.put(key, query);
     }
 
-    public void setQueries(Map<String, String> queries) {
-        this.queries = queries;
-    }
-
     public void setNonTranslatedQuery(String key, String query) {
         nonTranslatedQueries.put(key, query);
-    }
-
-    public void setNonTranslatedQueries(Map<String, String> nonTranslatedQueries) {
-        this.nonTranslatedQueries = nonTranslatedQueries;
     }
 
     /**
@@ -60,7 +51,7 @@ public class TaskQueryBuilder1 {
             fileTxt.setFormatter(formatterTxt);
             logger.addHandler(fileTxt);
         } catch (Exception cause) {
-            throw new TaskQueryBuilderException(cause);
+            throw new BetterQueryBuilderException(cause);
         }
     }
 
@@ -124,7 +115,7 @@ public class TaskQueryBuilder1 {
             writer.close();
 
         } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
+            throw new BetterQueryBuilderException(e);
         }
     }
 
@@ -213,7 +204,7 @@ public class TaskQueryBuilder1 {
                 tasks.add(new Task(taskNum, taskTitle, taskStmt, taskNarr, taskExampleDocuments, requests));
             }
         } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
+            throw new BetterQueryBuilderException(e);
         }
     }
 
@@ -431,68 +422,6 @@ public class TaskQueryBuilder1 {
         writeQueryFile();
     }
 
-    /**
-     * Processes the analytic tasks file: generates queries for the Tasks and Requests,
-     * executes the queries, annotates hits with events.
-     */
-    private void processRequestQueries(String analyticTasksFile, String mode, String outputQueryFileName,
-                                    boolean targetLanguageIsEnglish, String programDirectory, String phase) {
-        logger.info("Starting request-level query construction");
-        this.programDirectory = programDirectory;
-        this.spacy = new Spacy(programDirectory);
-        this.mode = mode;
-        this.analyticTasksFile = analyticTasksFile;
-        this.targetLanguageIsEnglish = targetLanguageIsEnglish;
-        this.outputQueryFileName = outputQueryFileName;
-        this.phase = phase;
-        buildRequestQueries();
-    }
-
-    public void buildRequestQueries() {
-        buildAndWriteQueryFile_MultiPartite(outputQueryFileName + ".NON_TRANSLATED", "en");
-        if (targetLanguageIsEnglish) {
-            buildAndWriteQueryFile_MultiPartite(outputQueryFileName, "en");
-        } else {
-            buildAndWriteQueryFile_MultiPartite(outputQueryFileName, "ar");
-        }
-    }
-
-    public void buildAndWriteQueryFile_MultiPartite(String queryFileName, String outLang) {
-        try {
-            String programName = "python3";
-            String pythonProgramName = programDirectory + "run_multipartiterank_qformulator.py";
-            String inputFile = analyticTasksFile;
-            String tempCommand = programName + " " + pythonProgramName
-                    + " --input_file=" + inputFile
-                    + " --output_file=" + queryFileName
-                    + " --out_lang=" + outLang
-                    + " --program_directory=" + programDirectory
-                    + " --mode=" + mode
-                    + " --phase=" + phase;
-
-            logger.info("Executing this command: " + tempCommand);
-
-            int exitVal = 0;
-            try {
-                ProcessBuilder processBuilder = new ProcessBuilder();
-                processBuilder.command("bash", "-c", tempCommand);
-                Process process = processBuilder.start();
-
-                exitVal = process.waitFor();
-            } catch (Exception cause) {
-                logger.log(Level.SEVERE, "Exception doing multipartiterank_qformulator execution", cause);
-                throw new TaskQueryBuilderException(cause);
-            }
-            if (exitVal != 0) {
-                logger.log(Level.SEVERE, "Unexpected ERROR from multipartiterank_qformulator, exit value is: " + exitVal);
-                throw new TaskQueryBuilderException("Unexpected ERROR from multipartiterank_qformulator, exit value is: " + exitVal);
-            }
-
-        } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
-        }
-    }
-
     private static String ensureTrailingSlash(String s) {
         if (!s.endsWith("/")) {
             return s + "/";
@@ -510,6 +439,7 @@ public class TaskQueryBuilder1 {
      *  target corpus language - "en" (English) or "ar" (Arabic)
      *  program directory - full path of the directory where programs needed by this program will be
      *    should end with a "/"
+     *  phase - only "Task" is supported in this query builder
      */
     public static void main (String[] args) {
         for (int x = 0; x < args.length; ++x) {
@@ -522,12 +452,9 @@ public class TaskQueryBuilder1 {
         String programDirectory = args[4];
         programDirectory = ensureTrailingSlash(programDirectory);
         String phase = args[5];
-        TaskQueryBuilder1 betterIR = new TaskQueryBuilder1();
+        BetterQueryBuilder2 betterIR = new BetterQueryBuilder2();
         betterIR.setupLogging();
-        if (phase.equals("Request")) {
-            betterIR.processRequestQueries(analyticTasksFile, mode, outputQueryFileName, targetLanguageIsEnglish,
-                    programDirectory, phase);
-        } else if (phase.equals("Task")) {
+        if (phase.equals("Task")) {
             betterIR.processTaskQueries(analyticTasksFile, mode, outputQueryFileName, targetLanguageIsEnglish,
                     programDirectory, phase);
         } else {

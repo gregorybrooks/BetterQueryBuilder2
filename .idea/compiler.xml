@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="BetterQueryBuilder2" />
         <module name="TaskQueryBuilder1" />
       </profile>
     </annotationProcessing>

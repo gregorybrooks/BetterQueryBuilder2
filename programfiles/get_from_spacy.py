@@ -27,7 +27,7 @@ for o in operations:
         sys.exit(-1)
 
 # Load English tokenizer, tagger, parser, NER and word vectors
-nlp = spacy.load("en_core_web_lg")
+nlp = spacy.load("en_core_web_sm")
 
 # Get query from stdin:
 text = ""

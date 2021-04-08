@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.umass.ciir</groupId>
-    <artifactId>TaskQueryBuilder1</artifactId>
+    <artifactId>BetterQueryBuilder2</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -38,7 +38,7 @@
 
                                     <!-- note that the main class is set *here* -->
 
-                                    <mainClass>edu.umass.ciir.TaskQueryBuilder1</mainClass>
+                                    <mainClass>edu.umass.ciir.BetterQueryBuilder2</mainClass>
                                 </transformer>
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>

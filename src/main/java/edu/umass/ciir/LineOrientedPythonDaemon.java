@@ -23,7 +23,7 @@ public class LineOrientedPythonDaemon {
             sentenceCalledProcessStdout = new BufferedReader(
                     new InputStreamReader(sentenceProcess.getInputStream()));
         } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
+            throw new BetterQueryBuilderException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class LineOrientedPythonDaemon {
                 phrases.add(line);
             }
         } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
+            throw new BetterQueryBuilderException(e);
         }
         return phrases;
     }
@@ -52,7 +52,7 @@ public class LineOrientedPythonDaemon {
         try {
             sentenceProcess.destroy();
         } catch (Exception e) {
-            throw new TaskQueryBuilderException(e);
+            throw new BetterQueryBuilderException(e);
         }
     }
 

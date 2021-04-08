@@ -18,7 +18,7 @@ This script returns the extracted phrases in STDOUT.
 operation = 'sentences'
 
 # Load English tokenizer, tagger, parser, NER and word vectors
-nlp = spacy.load("en_core_web_lg")
+nlp = spacy.load("en_core_web_sm")
 
 # Get query from stdin:
 while True:

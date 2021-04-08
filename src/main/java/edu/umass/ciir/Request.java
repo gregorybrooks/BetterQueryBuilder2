@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Represents a specific analytic request within the larger analytic task (@see ConvertDryRunTasks.Task).
  */
 public class Request {
-    private static final Logger logger = Logger.getLogger("TaskQueryBuilder1");
+    private static final Logger logger = Logger.getLogger("BetterQueryBuilder2");
     String reqNum;
     String reqText;
     List<ExampleDocument> reqExampleDocs;
