@@ -447,7 +447,7 @@ public class BetterQueryBuilder2 {
         }
         String analyticTasksFile = args[0];
         String mode = args[1];
-        String outputQueryFileName = args[2];
+        String outputQueryFileName = args[2] + ".queries.json";
         boolean targetLanguageIsEnglish = (args[3].equals("en"));
         String programDirectory = args[4];
         programDirectory = ensureTrailingSlash(programDirectory);

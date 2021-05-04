@@ -1,3 +1,3 @@
 set -v
-docker rmi better-query-builder-2
-docker build -t better-query-builder-2 .
+docker rmi gregorybrooks/better-query-builder-2
+docker build -t gregorybrooks/better-query-builder-2 .
