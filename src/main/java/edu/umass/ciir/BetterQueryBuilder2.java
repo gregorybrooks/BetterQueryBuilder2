@@ -21,6 +21,11 @@ public class BetterQueryBuilder2 {
     private String outputQueryFileName;
     private Spacy spacy;
     private String phase;
+    private TranslatorInterface translator;
+
+    public void setTranslator(TranslatorInterface translator) {
+        this.translator = translator;
+    }
 
     public void setQuery(String key, String query) {
         queries.put(key, query);
@@ -289,7 +294,7 @@ public class BetterQueryBuilder2 {
          */
         List<String> translatedFinalList;
         if (!targetLanguageIsEnglish) {
-            translatedFinalList = spacy.getTranslations(finalList);
+            translatedFinalList = translator.getTranslations(finalList);
         } else {
             translatedFinalList = nonTranslatedFinalList;
         }
@@ -356,7 +361,7 @@ public class BetterQueryBuilder2 {
             nonTranslatedTaskPartsString = "#combine(" + nonTranslatedTaskPartsString + ") ";
             List<String> translatedTaskParts;
             if (!targetLanguageIsEnglish) {
-                translatedTaskParts = spacy.getTranslations(taskParts);
+                translatedTaskParts = translator.getTranslations(taskParts);
                 StringBuilder taskPartsStringBuilder = new StringBuilder();
                 for (String phrase : translatedTaskParts) {
                     taskPartsStringBuilder.append(filterCertainCharactersPostTranslation(phrase)).append(" ");
@@ -454,6 +459,9 @@ public class BetterQueryBuilder2 {
         String phase = args[5];
         BetterQueryBuilder2 betterIR = new BetterQueryBuilder2();
         betterIR.setupLogging();
+        betterIR.setTranslator(new RabTranslator(programDirectory));
+        //betterIR.setTranslator(new TableTranslator(programDirectory
+        //        + "translation_tables/en-fa-3-col-ttable-no-normal.txt"));
         if (phase.equals("Task")) {
             betterIR.processTaskQueries(analyticTasksFile, mode, outputQueryFileName, targetLanguageIsEnglish,
                     programDirectory, phase);

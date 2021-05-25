@@ -47,44 +47,4 @@ public class Spacy {
         return nounPhraseDaemon.getAnswers(text);
     }
 
-    private List<String> callPythonTranslationProgram(List<String> strings)  {
-        try {
-            String program = "translation_package/batch_translate.py";
-            System.out.println("Calling " + programDirectory + program + " " + programDirectory );
-            ProcessBuilder processBuilder = new ProcessBuilder("/usr/bin/python3",
-                    programDirectory + program, programDirectory);
-            processBuilder.directory(new File(programDirectory));
-
-            Process process = processBuilder.start();
-
-            BufferedWriter called_process_stdin = new BufferedWriter(
-                    new OutputStreamWriter(process.getOutputStream()));
-            BufferedReader called_process_stdout = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            for (String s : strings) {
-                called_process_stdin.write(s + "\n");
-            }
-            called_process_stdin.flush();
-            called_process_stdin.close();
-
-            List<String> phrases = new ArrayList<String>();
-            String line;
-            while ((line = called_process_stdout.readLine()) != null) {
-                phrases.add(line);
-            }
-            int exitVal = process.waitFor();
-            if (exitVal != 0) {
-                throw new BetterQueryBuilderException("Unexpected ERROR calling "
-                        + program );
-            }
-            return phrases;
-        } catch (Exception e) {
-            throw new BetterQueryBuilderException(e);
-        }
-    }
-
-    public List<String> getTranslations (List<String> strings) {
-        return callPythonTranslationProgram(strings);
-    }
 }
