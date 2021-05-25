@@ -79,10 +79,11 @@ public class BetterQueryBuilder2 {
                 JSONObject qentry = new JSONObject();
                 qentry.put("number", entry.getKey());
                 String query = entry.getValue();
-                /* WRONG: it's a REGEX so this just removes all "#sdm"
+                /* WRONG: it's a REGEX so this just removes all "#sdm" */
+                /* TEMP - do the wrong thing, to reproduce evaluation results: */
                 query = query.replaceAll("#sdm()", " ");
-                */
-                query = query.replaceAll("#sdm\\(\\)", " ");   // empty #sdm causes Galago errors
+
+                // query = query.replaceAll("#sdm\\(\\)", " ");   // empty #sdm causes Galago errors
                 qentry.put("text", query);
                 qlist.add(qentry);
             }
@@ -148,8 +149,10 @@ public class BetterQueryBuilder2 {
             q = q.replaceAll("@", " ");  // Galago has @ multi-word token thing
             q = q.replaceAll("#", " ");  // Galago thinks #926 is an illegal node type
             q = q.replaceAll("\"", " "); // remove potential of mis-matched quotes
+            /* TEMP to cause error again:
             q = q.replaceAll("“", " ");  // causes Galago to silently run an empty query
             q = q.replaceAll("”", " ");
+            */
             return q;
         }
     }
@@ -459,9 +462,17 @@ public class BetterQueryBuilder2 {
         String phase = args[5];
         BetterQueryBuilder2 betterIR = new BetterQueryBuilder2();
         betterIR.setupLogging();
+
+        /* Rab's new translator (#syn's for top 2 translations) */
+        /* TEMP change to use old translator to match evaluation run:
         betterIR.setTranslator(new RabTranslator(programDirectory));
-        //betterIR.setTranslator(new TableTranslator(programDirectory
-        //        + "translation_tables/en-fa-3-col-ttable-no-normal.txt"));
+         */
+        /* OLD translator (top 1 match in translation table) */
+        //String ttable = "translation_tables/en-fa-3-col-ttable-no-normal.txt"; // FARSI
+        String ttable = "translation_tables/unidirectional-with-null-en-ar.simple-tok.txt";  // ARABIC
+        betterIR.setTranslator(new TableTranslator(programDirectory
+                + ttable));
+
         if (phase.equals("Task")) {
             betterIR.processTaskQueries(analyticTasksFile, mode, outputQueryFileName, targetLanguageIsEnglish,
                     programDirectory, phase);
